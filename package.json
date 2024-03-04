@@ -1,0 +1,19 @@
+{
+  "name": "hardhat-project",
+  "devDependencies": {
+    "@nomicfoundation/hardhat-ethers": "*",
+    "@nomicfoundation/hardhat-toolbox": "*",
+    "@nomicfoundation/hardhat-verify": "^2.0.4",
+    "@openzeppelin/hardhat-upgrades": "*",
+    "@typechain/ethers-v6": "*",
+    "ethers": "*",
+    "hardhat": "*",
+    "typechain": "*"
+  },
+  "dependencies": {
+    "@openzeppelin/contracts": "*",
+    "@openzeppelin/contracts-upgradeable": "*",
+    "dotenv": "^16.4.5",
+    "prompt-sync": "^4.2.0"
+  }
+}
