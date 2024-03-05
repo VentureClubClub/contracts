@@ -2,14 +2,11 @@
 pragma solidity ^0.8.20;
 
 import "@openzeppelin/contracts/access/AccessControl.sol";
-import "@openzeppelin/contracts/utils/Counters.sol";
 import "@openzeppelin/contracts/utils/Address.sol";
 
 import "hardhat/console.sol";
 
 contract VCData is AccessControl {
-    using Counters for Counters.Counter;
-
     bytes32 public constant ACCOUNT_ADMIN = keccak256("ACCOUNT_ADMIN");
     bytes32 public constant DEAL_ADMIN = keccak256("DEAL_ADMIN");
     bytes32 public constant CONTRACT_ADMIN = keccak256("CONTRACT_ADMIN");
@@ -23,7 +20,7 @@ contract VCData is AccessControl {
         KYCStatus kycStatus;
     }
 
-    Counters.Counter private _accountIds;
+    uint256 private currentAccountId;
 
     mapping(uint256 => Account) public accounts;
     mapping(address => uint256) public accountIds;
@@ -55,8 +52,8 @@ contract VCData is AccessControl {
         KYCStatus _kycStatus,
         address[] memory addresses
     ) external onlyRole(ACCOUNT_ADMIN) {
-        _accountIds.increment();
-        uint256 newAccountId = _accountIds.current();
+        currentAccountId;
+        uint256 newAccountId = currentAccountId;
         accounts[newAccountId] = Account({
             countryCode: _countryCode,
             accreditationStatus: _accreditationStatus,
@@ -141,7 +138,7 @@ contract VCCompliance is AccessControl {
 
     constructor(address _vcData) {
         vcData = VCData(_vcData);
-        _setupRole(DEFAULT_ADMIN_ROLE, msg.sender);
+        _grantRole(DEFAULT_ADMIN_ROLE, msg.sender);
     }
 
     function setVCData(address _vcData) external onlyRole(DEFAULT_ADMIN_ROLE) {
@@ -161,7 +158,6 @@ contract VCCompliance is AccessControl {
 
     function transferAllowed(
         address transferCaller,
-        address from,
         address to,
         bytes32 dealId
     ) public view returns (bool) {
