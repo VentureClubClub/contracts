@@ -17,7 +17,7 @@ import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 
 import "./Compliance.sol";
 
-contract VentureClubUpgradeable_v2 is Initializable, ERC721Upgradeable, AccessControlUpgradeable {
+contract VentureClubUpgradeable_v3 is Initializable, ERC721Upgradeable, AccessControlUpgradeable {
     // V1 STORAGE DO NOT CHANGE
     using Address for address;
     using Strings for uint256;
@@ -50,6 +50,13 @@ contract VentureClubUpgradeable_v2 is Initializable, ERC721Upgradeable, AccessCo
     // V2 STORAGE
     // no new storage
     // END V2 STORAGE
+
+    // V3 STORAGE
+
+    VCCompliance public complianceContract;
+    mapping(uint256 => bytes32) public dealsByTokenId;
+
+    // END V3 STORAGE
 
     // Checks that the specific callId (msg.sender and any relevant
     // args) of this call was signed (granted) by the correct admin
@@ -129,7 +136,7 @@ contract VentureClubUpgradeable_v2 is Initializable, ERC721Upgradeable, AccessCo
         uint256 tokenId = _tokenIds;
         _tokenIds += 1;
         _mint(to, tokenId);
-        lockedTokens[tokenId] = true;
+        dealsByTokenId[tokenId] = dealId;
 
         emit Mint(to, tokenId, dealId, price);
     }
@@ -138,6 +145,7 @@ contract VentureClubUpgradeable_v2 is Initializable, ERC721Upgradeable, AccessCo
     function burn(uint256 tokenId, string calldata reason, bytes memory grant) external
         granted(abi.encode(msg.sender, tokenId, reason), grant, TOKEN_ADMIN) {
         lockedTokens[tokenId] = false;
+        delete dealsByTokenId[tokenId];
         _burn(tokenId);
         emit Burn(tokenId, reason);
     }
@@ -159,15 +167,23 @@ contract VentureClubUpgradeable_v2 is Initializable, ERC721Upgradeable, AccessCo
         emit SetContractAllowed(contractAddress, allowed, reason);
     }
 
-    // we need check our contract allow list, and for locked tokens
-    // before transfers
-    function _update(
-        address to,
-        uint256 tokenId,
-        address auth
-    ) internal virtual override returns (address) {
+    event SetCompliance(address complianceContract);
+    function setCompliance(address _complianceContract) external onlyRole(DEFAULT_ADMIN_ROLE) {
+        complianceContract = VCCompliance(_complianceContract);
+        emit SetCompliance(_complianceContract);
+    }
+
+    function _requireTransferAllowed(address from, address to, uint256 tokenId) internal virtual {
         require(lockedTokens[tokenId] == false, "VCNFT: Token is locked");
-        return super._update(to, tokenId, auth);
+        require(
+            complianceContract.transferAllowed(msg.sender, to, dealsByTokenId[tokenId]),
+            "VentureClubUpgradable_v3: Transfer not allowed"
+        );
+    }
+
+    function transferFrom(address from, address to, uint256 tokenId) public override virtual {
+        _requireTransferAllowed(from, to, tokenId);
+        super.transferFrom(from, to, tokenId);
     }
 }
 
