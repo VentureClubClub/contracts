@@ -27,9 +27,6 @@ contract VCData is AccessControl {
 
     mapping(bytes32 => uint256) public dealAssetIssueDates;
 
-    // Allowed Lockers are contracts that can lock assets and call
-    // transfers contracts or Rarible's auction house and marketplace,
-    // or loan contracts,
     mapping(address => bool) public allowedContracts;
 
     constructor(address _accountAdmin, address _dealAdmin, address _contractAdmin) {
@@ -52,7 +49,7 @@ contract VCData is AccessControl {
         KYCStatus _kycStatus,
         address[] memory addresses
     ) external onlyRole(ACCOUNT_ADMIN) {
-        currentAccountId;
+        currentAccountId += 1;
         uint256 newAccountId = currentAccountId;
         accounts[newAccountId] = Account({
             countryCode: _countryCode,
