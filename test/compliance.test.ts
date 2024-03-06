@@ -34,10 +34,6 @@ describe("Compliance.sol tests", function () {
       const kycStatus = 1;
       const addresses = [alice.address];
 
-      const nonce = ethers.encodeBytes32String('example_nonce');
-      const expiryBlock = (await ethers.provider.getBlockNumber()) + 100;
-      const grant = ethers.AbiCoder.defaultAbiCoder().encode(['address', 'string', 'uint8', 'uint8', 'address[]'], [alice.address, countryCode, accreditationStatus, kycStatus, addresses]);
-
       await expect(vcData.addAccount(countryCode, accreditationStatus, kycStatus, addresses))
         .to.emit(vcData, 'AccountAdded')
         .withArgs(0, countryCode, accreditationStatus, kycStatus, addresses);
@@ -59,10 +55,6 @@ describe("Compliance.sol tests", function () {
       const kycStatus = 1;
       const addresses = [alice.address];
 
-      const nonce = ethers.encodeBytes32String('example_nonce');
-      const expiryBlock = (await ethers.provider.getBlockNumber()) + 100;
-      const grant = ethers.AbiCoder.defaultAbiCoder().encode(['address', 'string', 'uint8', 'uint8', 'address[]'], [alice.address, countryCode, accreditationStatus, kycStatus, addresses]);
-
       // bob is now an admin, should pass
       await expect(vcData.connect(bob).addAccount(countryCode, accreditationStatus, kycStatus, addresses))
         .to.emit(vcData, 'AccountAdded')
@@ -81,10 +73,6 @@ describe("Compliance.sol tests", function () {
       const accreditationStatus = 2;
       const kycStatus = 1;
       const addresses = [alice.address];
-
-      const nonce = ethers.encodeBytes32String('example_nonce');
-      const expiryBlock = (await ethers.provider.getBlockNumber()) + 100;
-      const grant = ethers.AbiCoder.defaultAbiCoder().encode(['address', 'string', 'uint8', 'uint8', 'address[]'], [alice.address, countryCode, accreditationStatus, kycStatus, addresses]);
 
       // bob is not an admin, should fail
       await expect(vcData.connect(bob).addAccount(countryCode, accreditationStatus, kycStatus, addresses))
@@ -106,10 +94,6 @@ describe("Compliance.sol tests", function () {
       const accreditationStatus = 2;
       const kycStatus = 1;
       const addresses = [alice.address];
-
-      const nonce = ethers.encodeBytes32String('example_nonce');
-      const expiryBlock = (await ethers.provider.getBlockNumber()) + 100;
-      const grant = ethers.AbiCoder.defaultAbiCoder().encode(['address', 'string', 'uint8', 'uint8', 'address[]'], [alice.address, countryCode, accreditationStatus, kycStatus, addresses]);
 
       // bob is now an admin, should pass
       await expect(vcData.connect(bob).addAccount(countryCode, accreditationStatus, kycStatus, addresses))
@@ -136,19 +120,11 @@ describe("Compliance.sol tests", function () {
 
       // bob should also be able to update that account's addresses
       const addressesToAdd = [charlie.address];
-      const grantData = ethers.AbiCoder.defaultAbiCoder().encode(
-        ['address[]', 'uint256[]'],
-        [addressesToAdd, new Array(addressesToAdd.length).fill(accountId)]
-      );
       await expect(vcData.connect(bob).addAddresses(addressesToAdd, new Array(addressesToAdd.length).fill(accountId)))
         .to.emit(vcData, 'AddressAdded');
 
       // bob should also be able to remove that account's addresses
       const addressToRemove = charlie.address;
-      const grantData2 = ethers.AbiCoder.defaultAbiCoder().encode(
-        ['address'],
-        [addressToRemove]
-      );
       await expect(vcData.connect(bob).removeAddress(addressToRemove))
         .to.emit(vcData, 'AddressRemoved');
     });
@@ -163,10 +139,6 @@ describe("Compliance.sol tests", function () {
       const accreditationStatus = 2;
       const kycStatus = 1;
       const addresses = [alice.address];
-
-      const nonce = ethers.encodeBytes32String('example_nonce');
-      const expiryBlock = (await ethers.provider.getBlockNumber()) + 100;
-      const grant = ethers.AbiCoder.defaultAbiCoder().encode(['address', 'string', 'uint8', 'uint8', 'address[]'], [alice.address, countryCode, accreditationStatus, kycStatus, addresses]);
 
       // alice adds an account
       await expect(vcData.connect(alice).addAccount(countryCode, accreditationStatus, kycStatus, addresses))
@@ -186,19 +158,11 @@ describe("Compliance.sol tests", function () {
 
       // bob also shouldn't be able to update that account's addresses
       const addressesToAdd = [charlie.address];
-      const grantData = ethers.AbiCoder.defaultAbiCoder().encode(
-        ['address[]', 'uint256[]'],
-        [addressesToAdd, new Array(addressesToAdd.length).fill(accountId)]
-      );
       await expect(vcData.connect(bob).addAddresses(addressesToAdd, new Array(addressesToAdd.length).fill(accountId)))
         .to.be.revertedWithCustomError(vcData, "NOT_ADMIN");
 
       // bob also shouldn't be able to remove that account's addresses
       const addressToRemove = charlie.address;
-      const grantData2 = ethers.AbiCoder.defaultAbiCoder().encode(
-        ['address'],
-        [addressToRemove]
-      );
       await expect(vcData.connect(bob).removeAddress(addressToRemove))
         .to.be.revertedWithCustomError(vcData, "NOT_ADMIN");
     });
