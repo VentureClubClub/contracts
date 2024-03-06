@@ -957,7 +957,7 @@
             "label": "deals",
             "offset": 0,
             "slot": "1",
-            "type": "t_mapping(t_bytes32,t_struct(Deal)5403_storage)",
+            "type": "t_mapping(t_bytes32,t_struct(Deal)5934_storage)",
             "contract": "VentureClubUpgradeable_v3",
             "src": "contracts/VentureClubUpgradable_v3.sol:39"
           },
@@ -997,7 +997,7 @@
             "label": "complianceContract",
             "offset": 0,
             "slot": "6",
-            "type": "t_contract(VCCompliance)5350",
+            "type": "t_contract(VCCompliance)5352",
             "contract": "VentureClubUpgradeable_v3",
             "src": "contracts/VentureClubUpgradable_v3.sol:56"
           },
@@ -1145,11 +1145,11 @@
             "label": "uint64",
             "numberOfBytes": "8"
           },
-          "t_contract(VCCompliance)5350": {
+          "t_contract(VCCompliance)5352": {
             "label": "contract VCCompliance",
             "numberOfBytes": "20"
           },
-          "t_mapping(t_bytes32,t_struct(Deal)5403_storage)": {
+          "t_mapping(t_bytes32,t_struct(Deal)5934_storage)": {
             "label": "mapping(bytes32 => struct VentureClubUpgradeable_v3.Deal)",
             "numberOfBytes": "32"
           },
@@ -1161,7 +1161,7 @@
             "label": "mapping(uint256 => bytes32)",
             "numberOfBytes": "32"
           },
-          "t_struct(Deal)5403_storage": {
+          "t_struct(Deal)5934_storage": {
             "label": "struct VentureClubUpgradeable_v3.Deal",
             "members": [
               {
