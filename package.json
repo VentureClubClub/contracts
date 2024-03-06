@@ -15,5 +15,8 @@
     "@openzeppelin/contracts-upgradeable": "*",
     "dotenv": "^16.4.5",
     "prompt-sync": "^4.2.0"
+  },
+  "scripts": {
+    "test": "npx hardhat test"
   }
 }
