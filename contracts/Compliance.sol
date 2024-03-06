@@ -7,6 +7,7 @@ import "@openzeppelin/contracts/utils/Address.sol";
 import "hardhat/console.sol";
 
 contract VCData is AccessControl {
+    bytes32 public constant MASTER_ACCOUNT_ADMIN = keccak256("MASTER_ACCOUNT_ADMIN");
     bytes32 public constant ACCOUNT_ADMIN = keccak256("ACCOUNT_ADMIN");
     bytes32 public constant DEAL_ADMIN = keccak256("DEAL_ADMIN");
     bytes32 public constant CONTRACT_ADMIN = keccak256("CONTRACT_ADMIN");
@@ -14,10 +15,13 @@ contract VCData is AccessControl {
     enum AccreditationStatus { Unknown, NotAccredited, SelfAccredited, VerifiedAccredited }
     enum KYCStatus { Unknown, Valid, Lapased, Rejected }
 
+    error NOT_ADMIN();
+
     struct Account {
         string countryCode;
         AccreditationStatus accreditationStatus;
         KYCStatus kycStatus;
+        address admin;
     }
 
     uint256 private currentAccountId;
@@ -32,6 +36,7 @@ contract VCData is AccessControl {
     constructor(address _accountAdmin, address _dealAdmin, address _contractAdmin) {
         _grantRole(DEFAULT_ADMIN_ROLE, msg.sender);
         _grantRole(ACCOUNT_ADMIN, _accountAdmin);
+        _grantRole(MASTER_ACCOUNT_ADMIN, _accountAdmin);
         _grantRole(DEAL_ADMIN, _dealAdmin);
         _grantRole(CONTRACT_ADMIN, _contractAdmin);
     }
@@ -54,7 +59,8 @@ contract VCData is AccessControl {
         accounts[newAccountId] = Account({
             countryCode: _countryCode,
             accreditationStatus: _accreditationStatus,
-            kycStatus: _kycStatus
+            kycStatus: _kycStatus,
+            admin: msg.sender
         });
         for (uint256 i = 0; i < addresses.length; i++) {
             accountIds[addresses[i]] = newAccountId;
@@ -74,10 +80,14 @@ contract VCData is AccessControl {
         AccreditationStatus _accreditationStatus,
         KYCStatus _kycStatus
     ) external onlyRole(ACCOUNT_ADMIN) {
+        address admin = accounts[accountId].admin;
+        if (msg.sender != admin) { revert NOT_ADMIN(); }
+
         accounts[accountId] = Account({
             countryCode: _countryCode,
             accreditationStatus: _accreditationStatus,
-            kycStatus: _kycStatus
+            kycStatus: _kycStatus,
+            admin: admin
         });
 
         emit AccountUpdated(accountId, _countryCode, _accreditationStatus, _kycStatus);
@@ -99,6 +109,9 @@ contract VCData is AccessControl {
     event AddressAdded(address indexed addr, uint256 indexed accountId);
 
     function addAddress(address addr_, uint256 accountId_) public onlyRole(ACCOUNT_ADMIN) {
+        address admin = accounts[accountId_].admin;
+        if (msg.sender != admin) { revert NOT_ADMIN(); }
+
         accountIds[addr_] = accountId_;
         emit AddressAdded(addr_, accountId_);
     }
@@ -106,6 +119,9 @@ contract VCData is AccessControl {
     event AddressRemoved(address indexed addr);
 
     function removeAddress(address addr) external onlyRole(ACCOUNT_ADMIN) {
+        address admin = accounts[accountIds[addr]].admin;
+        if (msg.sender != admin) { revert NOT_ADMIN(); }
+
         delete accountIds[addr];
         emit AddressRemoved(addr);
     }
@@ -125,6 +141,18 @@ contract VCData is AccessControl {
 
     function getComplianceData(address _addr, bytes32 dealId) external view returns (Account memory, uint256) {
         return (accounts[accountIds[_addr]], dealAssetIssueDates[dealId]);
+    }
+
+    event AdminAdded(address admin);
+    function addAdmin(address admin) external onlyRole(MASTER_ACCOUNT_ADMIN) {
+        _grantRole(ACCOUNT_ADMIN, admin);
+        emit AdminAdded(admin);
+    }
+
+    event AdminRemoved(address admin);
+    function removeAdmin(address admin) external onlyRole(MASTER_ACCOUNT_ADMIN) {
+        _revokeRole(ACCOUNT_ADMIN, admin);
+        emit AdminRemoved(admin);
     }
 }
 
