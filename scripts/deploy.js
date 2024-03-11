@@ -18,6 +18,10 @@ switch (hre.network.name) {
     NFT_ADDRESS = process.env.MAINNET_NFT_ADDRESS;
     NFT_ADDRESS_NAME = 'MAINNET_NFT_ADDRESS';
     break;
+  case 'optimism':
+    NFT_ADDRESS = process.env.OPT_NFT_ADDRESS;
+    NFT_ADDRESS_NAME = 'OPT_NFT_ADDRESS';
+    break;
   case 'goerli':
     NFT_ADDRESS = process.env.GOERLI_NFT_ADDRESS;
     NFT_ADDRESS_NAME = 'GOERLI_NFT_ADDRESS';

@@ -36,7 +36,7 @@ describe("Compliance.sol tests", function () {
 
       await expect(vcData.addAccount(countryCode, accreditationStatus, kycStatus, addresses))
         .to.emit(vcData, 'AccountAdded')
-        .withArgs(0, countryCode, accreditationStatus, kycStatus, addresses);
+        .withArgs(1, countryCode, accreditationStatus, kycStatus, addresses);
 
       const account = await vcData.getAccount(alice.address);
       expect(account.countryCode).to.equal(countryCode);
@@ -58,7 +58,7 @@ describe("Compliance.sol tests", function () {
       // bob is now an admin, should pass
       await expect(vcData.connect(bob).addAccount(countryCode, accreditationStatus, kycStatus, addresses))
         .to.emit(vcData, 'AccountAdded')
-        .withArgs(0, countryCode, accreditationStatus, kycStatus, addresses);
+        .withArgs(1, countryCode, accreditationStatus, kycStatus, addresses);
 
       const account = await vcData.getAccount(alice.address);
       expect(account.countryCode).to.equal(countryCode);
@@ -98,7 +98,7 @@ describe("Compliance.sol tests", function () {
       // bob is now an admin, should pass
       await expect(vcData.connect(bob).addAccount(countryCode, accreditationStatus, kycStatus, addresses))
         .to.emit(vcData, 'AccountAdded')
-        .withArgs(0, countryCode, accreditationStatus, kycStatus, addresses);
+        .withArgs(1, countryCode, accreditationStatus, kycStatus, addresses);
 
       let account = await vcData.getAccount(alice.address);
       expect(account.countryCode).to.equal(countryCode);
@@ -143,7 +143,7 @@ describe("Compliance.sol tests", function () {
       // alice adds an account
       await expect(vcData.connect(alice).addAccount(countryCode, accreditationStatus, kycStatus, addresses))
         .to.emit(vcData, 'AccountAdded')
-        .withArgs(0, countryCode, accreditationStatus, kycStatus, addresses);
+        .withArgs(1, countryCode, accreditationStatus, kycStatus, addresses);
 
       const account = await vcData.getAccount(alice.address);
       expect(account.countryCode).to.equal(countryCode);

@@ -21,6 +21,10 @@ module.exports = {
       url: process.env.GOERLI_RPC_URL,
       accounts: pks,
     },
+    optimism: {
+      url: process.env.OPT_RPC_URL,
+      accounts: pks,
+    },
   },
   etherscan: {
     apiKey: process.env.ETHERSCAN_API_KEY,
