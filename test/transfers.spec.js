@@ -49,7 +49,7 @@ describe("Tranfers", function() {
     await vc.setCompliance(await vcCompliance.getAddress());
 
     const TestToken = await ethers.getContractFactory("TestToken")
-    const testToken = await TestToken.deploy(ethers.parseEther("1000000"));
+    const testToken = await TestToken.deploy();
     await testToken.waitForDeployment();
 
     newDeal = ["0x0000000000000000000000000000000000000000000000000000000000000000", monthsAgo(2)]
@@ -98,7 +98,6 @@ Non US	Non Accredited	8  month	ALLOWED
 */
 
   it("does not allow transfer of 2 month old asset to US accredited", async function() {
-    console.log("us accredited", usAccredited.address)
     vc.approve(usAccredited.address, 0);
     await expect(vc.connect(usAccredited).transferFrom(deployer.address, usAccredited.address, 0))
       .to.be.revertedWith("VentureClubUpgradable_v3: Transfer not allowed");

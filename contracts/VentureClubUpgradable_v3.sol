@@ -40,6 +40,7 @@ contract VentureClubUpgradeable_v3 is Initializable, ERC721Upgradeable, AccessCo
 
     mapping(uint256 => bool) public lockedTokens;
 
+    // Deprecated
     mapping(address => bool) public allowedContracts;
 
     string public tokenURIprefix;
@@ -156,15 +157,6 @@ contract VentureClubUpgradeable_v3 is Initializable, ERC721Upgradeable, AccessCo
     {
         lockedTokens[tokenId] = locked;
         emit SetLocked(tokenId, locked, reason);
-    }
-
-    event SetContractAllowed(address contractAddress, bool allowed, string reason);
-    function setContractAllowed(address contractAddress, bool allowed, string calldata reason, bytes memory grant)
-        external
-        granted(abi.encode(msg.sender, contractAddress, allowed, reason), grant, TOKEN_ADMIN)
-    {
-        allowedContracts[contractAddress] = allowed;
-        emit SetContractAllowed(contractAddress, allowed, reason);
     }
 
     event SetCompliance(address complianceContract);
