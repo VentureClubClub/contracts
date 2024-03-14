@@ -70,45 +70,54 @@ async function main() {
   );
   continuePrompt();
 
-  const VentureClubUpgradable = await ethers.getContractFactory(
-    'VentureClubUpgradeable'
-  );
-  const deployArgs = [
-    NAME,
-    SYMBOL,
-    deployer.address,
-    dealAdmin.address,
-    tokenAdmin.address,
-    URI_PREFIX,
-    URI_SUFFIX,
-  ];
-  console.log(
-    'Deploying VentureClubUpgradable with initialize args:',
-    deployArgs
-  );
-  const ventureClubUpgradable = await upgrades.deployProxy(
-    VentureClubUpgradable,
-    deployArgs,
-    { initializer: 'initialize' }
-  );
-  await ventureClubUpgradable.waitForDeployment();
-  console.log(
-    'VentureClubUpgradable deployed to:',
-    await ventureClubUpgradable.getAddress()
-  );
-  console.log('Add it to the .env file');
-  console.log(
-    `${NFT_ADDRESS_NAME}=${await ventureClubUpgradable.getAddress()}`
-  );
-  console.log();
+  let ventureClubUpgradable;
+  if(!NFT_ADDRESS) {
+    const VentureClubUpgradable = await ethers.getContractFactory(
+      'VentureClubUpgradeable'
+    );
+    const deployArgs = [
+      NAME,
+      SYMBOL,
+      deployer.address,
+      deployer.address,
+      deployer.address,
+      URI_PREFIX,
+      URI_SUFFIX,
+    ];
+    console.log(
+      'Deploying VentureClubUpgradable with initialize args:',
+      deployArgs
+    );
+    ventureClubUpgradable = await upgrades.deployProxy(
+      VentureClubUpgradable,
+      deployArgs,
+      { initializer: 'initialize' }
+    );
+    await ventureClubUpgradable.waitForDeployment();
+    console.log(
+      'VentureClubUpgradable deployed to:',
+      await ventureClubUpgradable.getAddress()
+    );
+    console.log('Add it to the .env file');
+    console.log(
+      `${NFT_ADDRESS_NAME}=${await ventureClubUpgradable.getAddress()}`
+    );
+    console.log();
+    console.log('waiting 6 blocks before verifying');
+    await ventureClubUpgradable.deploymentTransaction().wait(6);
+  } else {
+    ventureClubUpgradable = await ethers.getContractAt(
+      'VentureClubUpgradeable',
+      NFT_ADDRESS,
+    );
+    console.log('Using VentureClubUpgradable already deployed to:', NFT_ADDRESS);
+  }
 
   // if network is localhost or hardhat, exit, we're done, no need to verify
   if (hre.network.name === 'localhost' || hre.network.name === 'hardhat') {
     return;
   }
 
-  console.log('waiting 6 blocks before verifying');
-  await ventureClubUpgradable.deploymentTransaction().wait(6);
   await hre.run('verify:verify', {
     address: await ventureClubUpgradable.getAddress(),
     constructorArguments: [],
