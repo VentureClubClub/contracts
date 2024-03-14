@@ -118,7 +118,7 @@ contract VentureClubUpgradeable_v3 is Initializable, ERC721Upgradeable, AccessCo
         require(deals[id].manager == address(0), "VCNFT: Deal exists");
 
         Deal storage deal = deals[id];
-        deal.manager = dealManager;
+        deal.manager = dealManager;x
         deal.currency = currency;
 
         emit DealCreated(id, dealManager, currency);
