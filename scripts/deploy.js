@@ -63,10 +63,10 @@ if (!!NFT_ADDRESS) {
 }
 
 async function main() {
-  const [deployer, dealAdmin, tokenAdmin] = await ethers.getSigners();
+  const [deployer, tokenAdmin, dealAdmin] = await ethers.getSigners();
   console.log('Deploying NFT contracts to network:', hre.network.name);
   console.log(
-    `with the accounts: ${deployer.address} (deployer), ${dealAdmin.address} (dealAdmin), ${tokenAdmin.address} (tokenAdmin)`
+    `with the accounts:\ndeployer: ${deployer.address}\ntokanAdmin: ${tokenAdmin.address}\ndealAdmin: ${dealAdmin.address}`
   );
   continuePrompt();
 
@@ -79,8 +79,8 @@ async function main() {
       NAME,
       SYMBOL,
       deployer.address,
-      deployer.address,
-      deployer.address,
+      tokenAdmin.address,
+      dealAdmin.address,
       URI_PREFIX,
       URI_SUFFIX,
     ];
