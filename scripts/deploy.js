@@ -14,32 +14,35 @@ const URI_SUFFIX = process.env.TOKEN_URI_SUFFIX;
 var NFT_ADDRESS;
 var NFT_ADDRESS_NAME;
 switch (hre.network.name) {
-  case 'mainnet':
-    NFT_ADDRESS = process.env.MAINNET_NFT_ADDRESS;
-    NFT_ADDRESS_NAME = 'MAINNET_NFT_ADDRESS';
-    break;
-  case 'optimism':
-    NFT_ADDRESS = process.env.OPT_NFT_ADDRESS;
-    NFT_ADDRESS_NAME = 'OPT_NFT_ADDRESS';
-    break;
-  case 'goerli':
-    NFT_ADDRESS = process.env.GOERLI_NFT_ADDRESS;
-    NFT_ADDRESS_NAME = 'GOERLI_NFT_ADDRESS';
-    break;
-  case 'sepolia':
-    NFT_ADDRESS = process.env.SEPOLIA_NFT_ADDRESS;
-    NFT_ADDRESS_NAME = 'SEPOLIA_NFT_ADDRESS';
-    break;
-  case 'hardhat':
-    NFT_ADDRESS = process.env.HARDHAT_NFT_ADDRESS;
-    NFT_ADDRESS_NAME = 'HARDHAT_NFT_ADDRESS';
-    break;
-  case 'localhost':
-    NFT_ADDRESS = process.env.LOCALHOST_NFT_ADDRESS;
-    NFT_ADDRESS_NAME = 'LOCALHOST_NFT_ADDRESS';
-    break;
-  default:
-    throw new Error('Unsupported network');
+case 'mainnet':
+  NFT_ADDRESS = process.env.MAINNET_NFT_ADDRESS;
+  NFT_ADDRESS_NAME = 'MAINNET_NFT_ADDRESS';
+  break;
+case 'optimism':
+  NFT_ADDRESS = process.env.OPT_NFT_ADDRESS;
+  NFT_ADDRESS_NAME = 'OPT_NFT_ADDRESS';
+  break;
+case 'base':
+  NFT_ADDRESS = process.env.BASE_NFT_ADDRESS;
+  NFT_ADDRESS_NAME = 'BASE_NFT_ADDRESS';
+case 'goerli':
+  NFT_ADDRESS = process.env.GOERLI_NFT_ADDRESS;
+  NFT_ADDRESS_NAME = 'GOERLI_NFT_ADDRESS';
+  break;
+case 'sepolia':
+  NFT_ADDRESS = process.env.SEPOLIA_NFT_ADDRESS;
+  NFT_ADDRESS_NAME = 'SEPOLIA_NFT_ADDRESS';
+  break;
+case 'hardhat':
+  NFT_ADDRESS = process.env.HARDHAT_NFT_ADDRESS;
+  NFT_ADDRESS_NAME = 'HARDHAT_NFT_ADDRESS';
+  break;
+case 'localhost':
+  NFT_ADDRESS = process.env.LOCALHOST_NFT_ADDRESS;
+  NFT_ADDRESS_NAME = 'LOCALHOST_NFT_ADDRESS';
+  break;
+default:
+  throw new Error('Unsupported network');
 }
 
 function continuePrompt() {

@@ -9,14 +9,17 @@ switch (hre.network.name) {
 case 'mainnet':
   nftAddress = process.env.MAINNET_NFT_ADDRESS;
   break;
+case 'optimism':
+  nftAddress = process.env.OPT_NFT_ADDRESS;
+  break;
+case 'base':
+  nftAddress = process.env.BASE_NFT_ADDRESS;
+  break;
 case 'goerli':
   nftAddress = process.env.GOERLI_NFT_ADDRESS;
   break;
 case 'sepolia':
   nftAddress = process.env.SEPOLIA_NFT_ADDRESS;
-  break;
-case 'optimism':
-    nftAddress = process.env.OPT_NFT_ADDRESS;
   break;
 case 'hardhat':
   nftAddress = process.env.HARDHAT_NFT_ADDRESS;
