@@ -8,7 +8,6 @@ require('dotenv').config();
 const stagingKeys = process.env.STAGING_PRIVATE_KEYS.split(',') || [];
 const productionKeys = process.env.PRODUCTION_PRIVATE_KEYS.split(',') || [];
 
-
 /** @type import('hardhat/config').HardhatUserConfig */
 module.exports = {
   solidity: '0.8.20',

@@ -25,6 +25,7 @@ case 'optimism':
 case 'base':
   NFT_ADDRESS = process.env.BASE_NFT_ADDRESS;
   NFT_ADDRESS_NAME = 'BASE_NFT_ADDRESS';
+  break;
 case 'goerli':
   NFT_ADDRESS = process.env.GOERLI_NFT_ADDRESS;
   NFT_ADDRESS_NAME = 'GOERLI_NFT_ADDRESS';
