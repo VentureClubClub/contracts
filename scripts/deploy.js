@@ -53,7 +53,6 @@ function continuePrompt() {
   }
 }
 
-const NFT_UPGRADABLE_ADDRESS = process.env.NFT_UPGRADABLE_ADDRESS;
 if (!NAME || !SYMBOL || !URI_PREFIX || !URI_SUFFIX) {
   throw new Error(
     'Please set TOKEN_NAME, TOKEN_SYMBOL, TOKEN_URI_PREFIX, and TOKEN_URI_SUFFIX environment variables'
