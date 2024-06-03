@@ -1,7 +1,7 @@
 const { ethers, network, run, upgrades } = require('hardhat');
 
-const feeRecipient = ''
-const fundsRecipient = ''
+const feeRecipient = '0xD8E43dE65F2c7c2C3158046Fe55aDB45C86F99f8'
+const fundsRecipient = '0xD8E43dE65F2c7c2C3158046Fe55aDB45C86F99f8'
 
 async function main() {
   console.log('network:', network.name);
