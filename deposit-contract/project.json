@@ -1,0 +1,28 @@
+{
+  "name": "deposit-contract",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/deposit-contract/src",
+  "projectType": "library",
+  "targets": {
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["libs/deposit-contract/**/*.ts", "libs/deposit-contract/**/*.js"]
+      }
+    },
+    "test": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": [
+          {
+            "command": "npx hardhat test",
+            "forwardAllArgs": false
+          }
+        ],
+        "cwd": "libs/deposit-contract"
+      }
+    }
+  },
+  "tags": []
+}
