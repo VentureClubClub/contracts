@@ -2,12 +2,13 @@
 const { assert, expect } = require('chai');
 const { upgrades } = require('hardhat');
 
-describe.only("Decimals", function () {
+describe("Decimals", function () {
   let vc, deployer, alice, testToken;
 
   const tokenIds = [
     "0x0000000000000000000000000000000000000000000000000000000000000000",
     "0x0000000000000000000000000000000000000000000000000000000000000001",
+    "0x0000000000000000000000000000000000000000000000000000000000000002",
   ];
 
   beforeEach(async function () {
@@ -38,6 +39,7 @@ describe.only("Decimals", function () {
     const grant = new Uint8Array(32);
     await vc.createDeal(tokenIds[0], await alice.getAddress(), await testToken.getAddress(), 18, grant);
     await vc.createDeal(tokenIds[1], await alice.getAddress(), await testToken.getAddress(), 6, grant);
+    await vc.createDeal(tokenIds[2], await alice.getAddress(), await testToken.getAddress(), 0, grant);
   });
 
   it("Tracks decimals and transfers the correct amount", async function () {
@@ -53,5 +55,10 @@ describe.only("Decimals", function () {
     await expect(
       vc.mint(await deployer.getAddress(), tokenIds[1], 500, grant)
     ).to.changeTokenBalances(testToken, [deployer, alice], [-usdcAmount, usdcAmount])
-  })
+
+    testToken.approve(await vc.getAddress(), usdcAmount);
+    await expect(
+      vc.mint(await deployer.getAddress(), tokenIds[2], 500, grant)
+    ).to.changeTokenBalances(testToken, [deployer, alice], [-usdcAmount, usdcAmount])
+})
 });

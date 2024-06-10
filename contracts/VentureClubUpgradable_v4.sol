@@ -142,6 +142,9 @@ contract VentureClubUpgradeable_v4 is Initializable, ERC721Upgradeable, AccessCo
         IERC20 erc20 = IERC20(deals[dealId].currency);
         uint8 decimals = dealCurrencyDecimals[dealId];
         uint256 priceWei = price * (10 ** uint256(decimals));
+        if(decimals == 0) {
+            decimals = 6; // existing deals assumed 6 decimals
+        }
         require(erc20.transferFrom(msg.sender, deals[dealId].manager, price * (10 ** decimals)),
                 "VCNFT: Payment failed");
 
