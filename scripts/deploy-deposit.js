@@ -6,7 +6,7 @@ const fundsRecipient = '0xD8E43dE65F2c7c2C3158046Fe55aDB45C86F99f8'
 async function main() {
   console.log('network:', network.name);
   const [deployer] = await ethers.getSigners();
-  console.log(await deployer.getAddress());
+  console.log("deployer address", await deployer.getAddress());
   const Deposit = await ethers.getContractFactory('Deposit');
   const deposit = await Deposit.deploy(feeRecipient, fundsRecipient, await deployer.getAddress());
   await deposit.waitForDeployment()
