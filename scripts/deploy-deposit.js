@@ -1,3 +1,4 @@
+/* global require */
 const { ethers, network, run, upgrades } = require('hardhat');
 
 const feeRecipient = '0xD8E43dE65F2c7c2C3158046Fe55aDB45C86F99f8'
